@@ -23,29 +23,34 @@ class DaftarController extends Controller
       } else {
         //generate password
         $genpass = Str::random(25);
-        //Buat User
-        $user = new \App\Models\User;
-        $user->username = Str::slug($name);
-        $user->email = $email;
-        $user->password = bcrypt($genpass);
-        $user->save();
-        //Buat Pelanggan
-        $pelanggan = new \App\Models\Pelanggan;
-        $pelanggan->nama = $name;
-        $pelanggan->user_id = $user->id;
-        $pelanggan->sekolah = $sekolah;
-        $pelanggan->telepon = $telepon;
-        $pelanggan->status = $status ?? 'gratis';
-        $pelanggan->save();        
         //Data untuk email
         $data = array('name'=>$name, 'genpass' => $genpass, 'email' => $email);
         //Kirim Email
         Mail::send('mails.verify', $data, function($message) use ($name, $email) {
           $message->to($email, $name)->subject('Verifikasi Email untuk Simso');
-          $message->from('nurul@arlamas.com','noreply');
-        });        
-        
-        return "OK";
+          $message->from('infosimso@simso.id','noreply');
+        }); 
+        if(count(Mail::failures()) > 0){
+          $errors = 'Failed to send email, please try again.';
+          return $errors;
+        } else {
+          //Buat User
+          $user = new \App\Models\User;
+          $user->username = Str::slug($name);
+          $user->email = $email;
+          $user->password = bcrypt($genpass);
+          $user->save();
+          //Buat Pelanggan
+          $pelanggan = new \App\Models\Pelanggan;
+          $pelanggan->nama = $name;
+          $pelanggan->user_id = $user->id;
+          $pelanggan->sekolah = $sekolah;
+          $pelanggan->telepon = $telepon;
+          $pelanggan->status = $status ?? 'gratis';
+          $pelanggan->save();
+          
+          return "OK";
+        }        
       }
     }   
 }
