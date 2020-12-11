@@ -197,7 +197,7 @@
       </div>
     </section><!-- End Features Section -->
     <!-- ======= Gallery Section ======= -->
-    <section id="galeri" class="gallery">
+    {{-- <section id="galeri" class="gallery">
       <div class="container">
         <div class="section-title" data-aos="fade-up">
           <h2>Gallery</h2>
@@ -290,7 +290,8 @@
           </div>
         </div>
       </div>
-    </section><!-- End Gallery Section -->
+    </section> --}}
+    <!-- End Gallery Section -->
     <!-- ======= Client Section ======= -->
     {{-- <section id="klien" class="counts">
       <div class="container">
